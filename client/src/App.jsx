@@ -1,12 +1,15 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import Navbar from './components/Navbar.jsx';
-import Home from './pages/Home.jsx';
-import Login from './pages/Login.jsx';
-import Education from './pages/Education.jsx';
+import Navbar from "./components/Navbar.jsx";
+import Home from "./pages/Home.jsx";
+import Login from "./pages/Login.jsx";
+import Education from "./pages/Education.jsx";
+import Emergency from "./pages/Emergency.jsx";
+import Game from "./pages/Game.jsx";
+import UserProfile from "./pages/UserProfile.jsx";
 
 function App() {
   return (
@@ -18,7 +21,14 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/education" element={<Education />} />
-            <Route path="*" element={<div className="p-4">404 Not Found</div>} />
+            <Route path="/emergency" element={<Emergency />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/game" element={<Game />} />
+            <Route path="/profile" element={<UserProfile />} />
+            <Route
+              path="*"
+              element={<div className="p-4">404 Not Found</div>}
+            />
           </Routes>
         </main>
 

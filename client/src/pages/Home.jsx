@@ -198,7 +198,6 @@ const modelStats = [
         </Link>
       </div>
     </section>
-/}
       <section className="py-10 bg-red-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Phone className="h-8 w-8 mx-auto mb-6" />
