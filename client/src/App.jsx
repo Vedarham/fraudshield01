@@ -5,6 +5,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from './context/AuthContext.jsx';
 import Navbar from './components/Navbar.jsx';
 import Home from './pages/Home.jsx';
+import Scan from './pages/Scan.jsx';
+import Reports from './pages/Reports.jsx';
+import ReportScam from './pages/ReportScam.jsx';
+import Alerts from './pages/Alerts.jsx';
 import Emergency from './pages/Emergency.jsx';
 import Login from './pages/Login.jsx';
 import Game from './pages/Game.jsx';
@@ -20,8 +24,12 @@ function App() {
           <main>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
+              <Route path="/scan" element={<Scan />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/report" element={<ReportScam />} />
+              <Route path="/alerts" element={<Alerts />} />
               <Route path="/emergency" element={<Emergency />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/game" element={<Game />} />
               <Route path="/profile" element={<UserProfile/>} />
               <Route path="/education" element={<Education/>} />

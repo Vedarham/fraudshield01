@@ -1,0 +1,13 @@
+flask
+flask-cors
+transformers
+torch
+accelerate
+gunicorn
+urllib3
+requests
+beautifulsoup4
+sckit-learn
+datasets
+pandas
+numpy

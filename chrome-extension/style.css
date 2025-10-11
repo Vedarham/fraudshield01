@@ -1,0 +1,37 @@
+body {
+  font-family: Arial, sans-serif;
+  width: 250px;
+  margin: 0;
+  padding: 10px;
+  background: #f9fafb;
+}
+
+.popup-container {
+  text-align: center;
+}
+
+h1 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #2563eb;
+}
+
+button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+button:hover {
+  background: #1e40af;
+}
+
+#scanResult {
+  font-size: 14px;
+  color: #374151;
+}
