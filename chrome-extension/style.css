@@ -1,37 +1,102 @@
 body {
-  font-family: Arial, sans-serif;
-  width: 250px;
-  margin: 0;
-  padding: 10px;
-  background: #f9fafb;
+  font-family: "Poppins", sans-serif;
+  background: radial-gradient(circle at top left, #021b34, #03172a 80%);
+  color: #e8f0ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-.popup-container {
+.scan-container {
+  background: linear-gradient(145deg, #042238, #061f31);
+  box-shadow: 0 0 20px rgba(0, 200, 255, 0.15),
+              inset 0 0 10px rgba(0, 120, 255, 0.05);
+  border-radius: 20px;
+  padding: 30px;
+  width: 420px;
   text-align: center;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 150, 255, 0.1);
 }
 
-h1 {
-  font-size: 18px;
-  margin-bottom: 10px;
-  color: #2563eb;
+.scan-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #38bdf8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
 }
 
-button {
-  background: #2563eb;
-  color: white;
+.scan-box {
+  background: rgba(5, 30, 55, 0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(56, 189, 248, 0.1);
+  padding: 10px;
+  margin-bottom: 20px;
+  transition: 0.3s ease;
+}
+
+.scan-box:hover {
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
+}
+
+textarea {
+  width: 100%;
+  min-height: 120px;
+  background: transparent;
   border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
+  color: #e0faff;
+  resize: none;
+  outline: none;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+textarea::placeholder {
+  color: #6dbbe7;
+}
+
+.analyze-btn {
+  width: 100%;
+  background: linear-gradient(90deg, #00b4d8, #48cae4, #0096c7);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
   cursor: pointer;
-  font-size: 14px;
-  margin-bottom: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(0, 180, 216, 0.5);
 }
 
-button:hover {
-  background: #1e40af;
+.analyze-btn:hover {
+  background: linear-gradient(90deg, #48cae4, #00b4d8, #0077b6);
+  box-shadow: 0 0 25px rgba(72, 202, 228, 0.8);
+  transform: translateY(-2px);
 }
 
-#scanResult {
-  font-size: 14px;
-  color: #374151;
+.result-box {
+  background: rgba(5, 25, 45, 0.6);
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 20px;
+  border: 1px solid rgba(0, 150, 255, 0.15);
+  text-align: left;
+}
+
+.result-box p {
+  margin: 6px 0;
+  font-size: 0.95rem;
+  color: #bde0fe;
+}
+
+.result-box span {
+  font-weight: 600;
+  color: #48cae4;
 }
