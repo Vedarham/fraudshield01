@@ -98,7 +98,7 @@ const Scan = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#021727] via-[#043b57] to-[#065b7c] py-12 text-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
           <Shield className="h-16 w-16 mx-auto mb-4 text-blue-600" />
@@ -110,9 +110,20 @@ const Scan = () => {
           </p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <div className="mb-6">
-            <div className="flex items-center justify-center space-x-4 mb-4 flex-wrap">
+        
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4 }}
+          className="bg-white/10 backdrop-blur-xl border border-[#0a3d52]/50 rounded-2xl shadow-2xl p-8"
+        >
+         
+          <div className="flex flex-wrap justify-center gap-4 mb-8">
+            {[
+              { type: "text", label: "Text", icon: <Type className="h-5 w-5" /> },
+              { type: "url", label: "URL", icon: <LinkIcon className="h-5 w-5" /> },
+              { type: "audio", label: "Call Audio", icon: <Mic className="h-5 w-5" /> },
+            ].map((option) => (
               <button
                 onClick={() => setInputType("text")}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-colors ${
@@ -186,6 +197,7 @@ const Scan = () => {
             )}
           </div>
 
+        
           <button
             onClick={handleScan}
             disabled={isScanning || (inputType !== "audio" && !inputText.trim())}
@@ -193,7 +205,7 @@ const Scan = () => {
           >
             {isScanning ? (
               <>
-                <Loader className="h-5 w-5 animate-spin" />
+                <Loader className="h-6 w-6 animate-spin" />
                 <span>Analyzing with AI...</span>
               </>
             ) : (
@@ -203,11 +215,12 @@ const Scan = () => {
               </>
             )}
           </button>
-        </div>
+        </motion.div>
 
+        
         {result && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className={`rounded-xl p-8 ${
@@ -220,7 +233,7 @@ const Scan = () => {
               {result.label === "Scam" ? (
                 <AlertTriangle className="h-12 w-12 text-red-500" />
               ) : (
-                <CheckCircle className="h-12 w-12 text-green-500" />
+                <CheckCircle className="h-14 w-14 text-emerald-400" />
               )}
               <div>
                 <h2
@@ -244,7 +257,7 @@ const Scan = () => {
               </div>
             </div>
 
-            <div className="text-sm text-gray-500">
+            <p className="text-gray-300 text-sm mb-6">
               Scanned on: {new Date(result.scanned_on).toLocaleString()}
             </div>
 
