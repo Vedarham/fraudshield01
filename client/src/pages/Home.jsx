@@ -47,75 +47,75 @@ const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#021727] via-[#032c44] to-[#064f6a] text-white">
-      {/* Hero Section */}
+    <div className="min-h-screen">
       <section className="relative text-white h-screen overflow-hidden">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover z-0"
-        >
-          <source src={Herovideo} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        <div className="absolute inset-0 bg-black/40 z-10" />
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-0"
+      >
+        <source src={Herovideo} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/80 z-10" />
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 h-full flex items-center justify-center">
+        <div className="text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <Shield className="h-20 w-20 mx-auto mb-6 text-yellow-300" />
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">
+              Fraud Shield
+            </h1>
+            <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto">
+              AI-Driven Scam Detection & Awareness Platform protecting you from online fraud
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/scan"
+                className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors flex items-center justify-center space-x-2"
+              >
+                <Zap className="h-5 w-5" />
+                <span>Start Scanning</span>
+              </Link>
+              <Link
+                to="/reports"
+                className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors"
+              >
+                View Reports
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      </div>
 
-        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 h-full flex items-center justify-center">
-          <div className="text-center">
+
+      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent z-20" />
+    </section>
+
+     <section className="py-16 bg-#19183B text-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <h2 className="text-3xl font-bold text-gray-900 mb-10 text-center">Dataset Overview</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
+          {datasetStats.map((stat, idx) => (
             <motion.div
+              key={idx}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.6, delay: idx * 0.1 }}
+              className="text-center"
             >
-              <Shield className="h-20 w-20 mx-auto mb-6 text-cyan-400 drop-shadow-[0_0_8px_#00bcd4]" />
-              <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
-                Fraud Shield
-              </h1>
-              <p className="text-xl md:text-2xl mb-8 text-cyan-100 max-w-3xl mx-auto">
-                AI-Driven Scam Detection & Awareness Platform protecting you from online fraud
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  to="/scan"
-                  className="bg-gradient-to-r from-[#00c6ff] to-[#0072ff] px-8 py-4 rounded-lg font-semibold hover:from-[#00e0ff] hover:to-[#00bcd4] transition-all duration-300 flex items-center justify-center space-x-2 shadow-[0_0_12px_#00bcd4]"
-                >
-                  <Zap className="h-5 w-5" />
-                  <span>Start Scanning</span>
-                </Link>
-                <Link
-                  to="/reports"
-                  className="border-2 border-cyan-300 text-cyan-200 px-8 py-4 rounded-lg font-semibold hover:bg-cyan-300 hover:text-[#032c44] transition-colors"
-                >
-                  View Reports
-                </Link>
-              </div>
+              {stat.icon}
+              <div className="text-4xl font-extrabold text-blue-600">{stat.number}</div>
+              <div className="mt-2 text-gray-600">{stat.label}</div>
             </motion.div>
-          </div>
+          ))}
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#032c44] to-transparent z-20" />
-      </section>
-
-      {/* Dataset Section */}
-      <section className="py-16 bg-[#032c44] text-cyan-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-cyan-50 mb-10 text-center">Dataset Overview</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
-            {datasetStats.map((stat, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: idx * 0.1 }}
-                className="text-center"
-              >
-                {stat.icon}
-                <div className="text-4xl font-extrabold text-cyan-300">{stat.number}</div>
-                <div className="mt-2 text-cyan-100">{stat.label}</div>
-              </motion.div>
-            ))}
-          </div>
 
           <h2 className="text-3xl font-bold text-cyan-50 mb-10 text-center">Model Performance</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
@@ -170,36 +170,32 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Get Started Section */}
-      <section className="relative py-20 text-white overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img
-            src={getStartedImage}
-            alt="Cyber protection"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/40" />
-
-        </div>
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold mb-6">
-            Stay Protected Today
-          </h2>
-          <p className="text-xl mb-8 opacity-90">
-            Join thousands of users who trust Fraud Shield to keep them safe from online scams
-          </p>
-          <Link
-            to="/scan"
-            className="bg-gradient-to-r from-[#00c6ff] to-[#0072ff] px-8 py-4 rounded-lg font-semibold hover:from-[#00e0ff] hover:to-[#00bcd4] transition-all duration-300 inline-flex items-center space-x-2 shadow-[0_0_12px_#00bcd4]"
-          >
-            <Shield className="h-5 w-5" />
-            <span>Get Started Now</span>
-          </Link>
-        </div>
-      </section>
-
-      {/* Emergency Section */}
-      <section className="py-10 bg-[#02283f] text-cyan-100">
+        <section className="relative py-20 text-white overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <img
+          src={getStartedImage} 
+          alt="Cyber protection"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/80" />
+      </div>
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 className="text-4xl font-bold mb-6">
+          Stay Protected Today
+        </h2>
+        <p className="text-xl mb-8 opacity-90">
+          Join thousands of users who trust Fraud Shield to keep them safe from online scams
+        </p>
+        <Link
+          to="/scan"
+          className="bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold hover:bg-purple-50 transition-colors inline-flex items-center space-x-2"
+        >
+          <Shield className="h-5 w-5" />
+          <span>Get Started Now</span>
+        </Link>
+      </div>
+    </section>
+      <section className="py-10 bg-red-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Phone className="h-8 w-8 mx-auto mb-6 text-cyan-400" />
           <h2 className="text-2xl font-bold mb-4 text-cyan-50">Emergency Assistance</h2>

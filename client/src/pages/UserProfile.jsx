@@ -1,57 +1,48 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { db } from '../firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { getUserProfile, updateUserProfile } from '../services/api';
 
 const UserProfile = () => {
-  const user = {
-    uid: 'demo123',
-    displayName: 'Guest User',
-    photoURL: null
-  };
-
+  const Navigate = useNavigate();
+  const { user } = useAuth();
   const [reports, setReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [bio, setBio] = useState('');
   const [isEditingBio, setIsEditingBio] = useState(false);
 
-
   useEffect(() => {
-    const mockReports = [
-      {
-        id: '1',
-        title: 'Fake Job Offer',
-        description: 'Received a WhatsApp message offering fake job with advance fee.',
-        scamType: 'Employment Scam',
-        amount: '2000',
-        location: 'Mumbai',
-        contactInfo: 'fraud@example.com',
-        evidence: ['screenshot1.png', 'screenshot2.png'],
-        status: 'Pending',
-        submissionDate: new Date()
-      },
-      {
-        id: '2',
-        title: 'Phishing Email',
-        description: 'Email pretending to be from a bank asking for OTP.',
-        scamType: 'Phishing',
-        amount: '0',
-        location: 'Online',
-        contactInfo: 'support@fakebank.com',
-        evidence: ['email.png'],
-        status: 'Verified',
-        submissionDate: new Date()
+    const fetchReports = async () => {
+      if (user) {
+        const q = query(collection(db, 'reports'), where('userId', '==', user.uid));
+        const querySnapshot = await getDocs(q);
+        const userReports = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setReports(userReports);
       }
-    ];
+    };
 
-    setReports(mockReports);
-    setBio('Cybersecurity enthusiast, helping others stay safe online.');
-  }, []);
+    const fetchUserProfile = async () => {
+      if (user) {
+        const userProfile = await getUserProfile(user.uid);
+        if (userProfile && userProfile.bio) {
+          setBio(userProfile.bio);
+        }
+      }
+    };
+
+    fetchReports();
+    fetchUserProfile();
+  }, [user]);
 
   const handleViewDetails = (report) => {
     setSelectedReport(report);
   };
 
   const handleCreateReport = () => {
-    setShowCreateModal(true);
+    Navigate('/reports');
   };
 
   const handleReportCreated = (reportData) => {
@@ -59,19 +50,22 @@ const UserProfile = () => {
     setShowCreateModal(false);
   };
 
-  const handleBioChange = (e) => setBio(e.target.value);
+  const handleBioChange = (e) => {
+    setBio(e.target.value);
+  };
 
-  const handleBioSubmit = (e) => {
+  const handleBioSubmit = async (e) => {
     e.preventDefault();
-    setIsEditingBio(false);
+    if (user) {
+      await updateUserProfile(user.uid, { bio });
+      setIsEditingBio(false);
+    }
   };
 
   const SummaryWidgets = ({ reports }) => {
     const total = reports.length;
     const pending = reports.filter(r => r.status === 'Pending').length;
-    const lastDate = reports.length
-      ? new Date(reports[0].submissionDate).toLocaleDateString()
-      : 'No reports';
+    const lastDate = reports.length ? new Date(reports[0].submissionDate.toDate()).toLocaleDateString() : 'No reports';
 
     const widgets = [
       { title: 'Total Reports', value: total, color: 'bg-blue-500', icon: '📊' },
@@ -96,62 +90,45 @@ const UserProfile = () => {
     );
   };
 
-  const UserProfileCard = ({ user }) => (
-    <div className="bg-white rounded-lg shadow p-6 mb-8">
-      <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
-        <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center text-4xl text-gray-500">
-          {user && user.photoURL ? (
-            <img
-              src={user.photoURL}
-              alt="Profile"
-              className="rounded-full w-full h-full object-cover"
-            />
-          ) : (
-            '👤'
-          )}
-        </div>
-        <div className="flex-1">
-          <h2 className="text-2xl font-bold">{user ? user.displayName : 'Guest'}</h2>
-          <div className="mt-2">
-            <label className="block text-sm font-medium text-gray-700">Bio</label>
-            {isEditingBio ? (
-              <form onSubmit={handleBioSubmit}>
-                <textarea
-                  value={bio}
-                  onChange={handleBioChange}
-                  className="w-full border rounded px-3 py-2 mt-1"
-                />
-                <div className="flex space-x-2 mt-2">
-                  <button
-                    type="submit"
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                  >
-                    Save
-                  </button>
-                  <button
-                    onClick={() => setIsEditingBio(false)}
-                    className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
+  const UserProfileCard = ({ user }) => {
+    return (
+      <div className="bg-white rounded-lg shadow p-6 mb-8">
+        <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
+          <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center text-4xl text-gray-500">
+            {user && user.photoURL ? (
+              <img src={user.photoURL} alt="Profile" className="rounded-full w-full h-full object-cover" />
             ) : (
-              <div>
-                <p className="text-gray-700">{bio || 'No bio added'}</p>
-                <button
-                  onClick={() => setIsEditingBio(true)}
-                  className="text-blue-500 hover:underline"
-                >
-                  Edit Bio
-                </button>
-              </div>
+              '👤'
             )}
+          </div>
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold">{user ? user.displayName : 'Guest'}</h2>
+            <div className="mt-2">
+              <label className="block text-sm font-medium text-gray-700">Bio</label>
+              {isEditingBio ? (
+                <form onSubmit={handleBioSubmit}>
+                  <textarea
+                    value={bio}
+                    onChange={handleBioChange}
+                    className="w-full border rounded px-3 py-2 mt-1"
+                  />
+                  <div className="flex space-x-2 mt-2">
+                    <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Save</button>
+                    <button onClick={() => setIsEditingBio(false)} className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">Cancel</button>
+                  </div>
+                </form>
+              ) : (
+                <div>
+                  <p className="text-gray-700">{bio || 'No bio added'}</p>
+                  <button onClick={() => setIsEditingBio(true)} className="text-blue-500 hover:underline">Edit Bio</button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const ReportsSection = ({ reports }) => {
     const [filter, setFilter] = useState('all');
@@ -162,21 +139,14 @@ const UserProfile = () => {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold">Scam Reports</h2>
-          <button
-            onClick={handleCreateReport}
-            className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
-          >
-            Submit New Report
-          </button>
+          <button onClick={handleCreateReport} className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">Submit New Report</button>
         </div>
         <div className="flex space-x-2 bg-gray-100 p-1 rounded-lg">
           {['all', 'pending', 'verified', 'rejected'].map(key => (
             <button
               key={key}
               onClick={() => setFilter(key)}
-              className={`px-4 py-2 rounded-md text-sm ${filter === key
-                ? 'bg-white shadow text-blue-600'
-                : 'text-gray-600'}`}
+              className={`px-4 py-2 rounded-md text-sm ${filter === key ? 'bg-white shadow text-blue-600' : 'text-gray-600'}`}
             >
               {key.charAt(0).toUpperCase() + key.slice(1)}
             </button>
@@ -195,9 +165,7 @@ const UserProfile = () => {
               <div key={report.id} className="bg-white rounded shadow p-4">
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="font-semibold">{report.title}</h3>
-                  <span className="text-xs px-2 py-1 rounded bg-gray-100 text-gray-700">
-                    {report.status}
-                  </span>
+                  <span className="text-xs px-2 py-1 rounded bg-gray-100 text-gray-700">{report.status}</span>
                 </div>
                 <p className="text-sm text-gray-600 line-clamp-2">{report.description}</p>
                 <button
@@ -218,8 +186,7 @@ const UserProfile = () => {
 
   const ReportDetailsModal = ({ report, onClose }) => {
     if (!report) return null;
-    const formatDate = (date) => new Date(date).toLocaleString();
-
+    const formatDate = (date) => new Date(date.toDate()).toLocaleString();
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4 z-50">
         <div className="bg-white max-w-xl w-full rounded-lg overflow-auto max-h-[90vh] p-6">
@@ -227,9 +194,7 @@ const UserProfile = () => {
             <h2 className="text-2xl font-bold">{report.title}</h2>
             <button onClick={onClose} className="text-gray-500 text-xl">×</button>
           </div>
-          <p className="text-sm text-gray-600 mb-2">
-            Submitted: {formatDate(report.submissionDate)}
-          </p>
+          <p className="text-sm text-gray-600 mb-2">Submitted: {formatDate(report.submissionDate)}</p>
           <p className="mb-4">{report.description}</p>
           <div className="space-y-2">
             <p><strong>Type:</strong> {report.scamType}</p>
@@ -255,7 +220,9 @@ const UserProfile = () => {
       evidence: ''
     });
 
-    const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+    const handleChange = (e) => {
+      setForm({ ...form, [e.target.name]: e.target.value });
+    };
 
     const handleSubmit = (e) => {
       e.preventDefault();
@@ -264,7 +231,9 @@ const UserProfile = () => {
         id: Date.now().toString(),
         evidence: form.evidence.split(',').map(e => e.trim()),
         submissionDate: new Date(),
-        status: 'Pending'
+        status: 'Pending',
+        scanResult: null,
+        userId: user.uid
       };
       onReportCreated(newReport);
     };
@@ -291,12 +260,7 @@ const UserProfile = () => {
                 />
               </div>
             ))}
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-            >
-              Submit
-            </button>
+            <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Submit</button>
           </form>
         </div>
       </div>
@@ -314,15 +278,8 @@ const UserProfile = () => {
         <SummaryWidgets reports={reports} />
         <UserProfileCard user={user} />
         <ReportsSection reports={reports} />
-        <ReportDetailsModal
-          report={selectedReport}
-          onClose={() => setSelectedReport(null)}
-        />
-        <CreateReportModal
-          isOpen={showCreateModal}
-          onClose={() => setShowCreateModal(false)}
-          onReportCreated={handleReportCreated}
-        />
+        <ReportDetailsModal report={selectedReport} onClose={() => setSelectedReport(null)} />
+        <CreateReportModal isOpen={showCreateModal} onClose={() => setShowCreateModal(false)} onReportCreated={handleReportCreated} />
       </div>
     </div>
   );

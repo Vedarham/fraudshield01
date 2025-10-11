@@ -1,34 +1,28 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Shield, Mail, Lock, Eye, EyeOff, Chrome } from 'lucide-react';
+import { Link, Navigate } from 'react-router-dom';
+import { Shield, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useAuth } from '../context/AuthContext.jsx';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { user, login, loginWithGoogle } = useAuth();
 
-  const mockLogin = async (email, password) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (email === 'demo@fraudshield.com' && password === 'demo123') {
-          resolve('Login successful');
-        } else {
-          reject(new Error('Invalid credentials'));
-        }
-      }, 1000);
-    });
-  };
+  // Redirect if already logged in
+  if (user) {
+    return <Navigate to="/" replace />;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await mockLogin(email, password);
-      alert(response);
+      await login(email, password);
     } catch (error) {
-      alert(error.message);
+      console.error('Login failed:', error);
     } finally {
       setIsLoading(false);
     }
@@ -36,10 +30,13 @@ const Login = () => {
 
   const handleGoogleLogin = async () => {
     setIsLoading(true);
-    setTimeout(() => {
-      alert('Google login not implemented in this mock');
+    try {
+      await loginWithGoogle();
+    } catch (error) {
+      console.error('Google login failed:', error);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -58,13 +55,13 @@ const Login = () => {
             <p className="text-gray-600">Sign in to protect yourself from scams</p>
           </div>
 
-          
+
           <button
             onClick={handleGoogleLogin}
             disabled={isLoading}
             className="w-full flex items-center justify-center space-x-3 bg-white border-2 border-gray-300 rounded-lg px-4 py-3 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mb-6"
           >
-            <Chrome className="h-5 w-5 text-blue-600" />
+            {/* <Chrome className="h-5 w-5 text-blue-600" /> */}
             <span className="text-gray-700 font-medium">Continue with Google</span>
           </button>
 
@@ -131,7 +128,10 @@ const Login = () => {
                   Remember me
                 </label>
               </div>
-              <Link to="/forgot-password" className="text-sm text-blue-600 hover:text-blue-500 font-medium">
+              <Link
+                to="/forgot-password"
+                className="text-sm text-blue-600 hover:text-blue-500 font-medium"
+              >
                 Forgot password?
               </Link>
             </div>
@@ -155,13 +155,16 @@ const Login = () => {
           <div className="mt-8 text-center">
             <p className="text-gray-600">
               Don't have an account?{' '}
-              <Link to="/register" className="text-blue-600 hover:text-blue-500 font-medium">
+              <Link
+                to="/register"
+                className="text-blue-600 hover:text-blue-500 font-medium"
+              >
                 Sign up
               </Link>
             </p>
           </div>
 
-         
+          {/* Demo Credentials */}
           <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
             <p className="text-sm text-blue-800 font-medium mb-2">Demo Credentials:</p>
             <p className="text-sm text-blue-700">
