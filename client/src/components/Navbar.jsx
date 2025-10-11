@@ -38,15 +38,13 @@ const Navbar = () => {
     `https://placehold.co/40x40/E2E8F0/4A5568?text=${user?.name?.[0] || "U"}`;
 
   return (
-    <nav className="fixed top-4 left-1/2  transform -translate-x-1/2 z-50 w-[95%] md:w-[90%] lg:w-[80%] rounded-full bg-[#031a2a]/80 backdrop-blur-xl border border-white/10 shadow-[0_0_20px_rgba(0,255,255,0.1)]">
+    <nav className="fixed bottom-4 left-1/2  transform -translate-x-1/2 z-50 w-[95%] md:w-[90%] lg:w-[80%] rounded-full bg-[#031a2a]/10 backdrop-blur-xl border border-white/10 shadow-[0_0_20px_rgba(0,255,255,0.1)]">
       <div className="max-w-7xl mx-auto flex justify-between items-center px-6 h-14">
-        {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
           <Shield className="h-6 w-6 text-cyan-400" />
           <span className="text-lg font-semibold text-white">Fraud Shield</span>
         </Link>
 
-       {/* Desktop Nav Icons */}
 <div className="hidden md:flex items-center space-x-6">
   {navItems.map((item) => (
     <Link
@@ -64,8 +62,6 @@ const Navbar = () => {
   ))}
 </div>
 
-
-        {/* User / Login */}
         <div className="hidden md:flex items-center space-x-3">
           {user ? (
             <div className="flex items-center space-x-3">
@@ -97,7 +93,6 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center">
           <button
             onClick={() => setIsOpen(!isOpen)}
@@ -108,7 +103,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       {isOpen && (
         <motion.div
           initial={{ opacity: 0, height: 0 }}

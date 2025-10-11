@@ -51,7 +51,6 @@ function Education() {
         <section>
           <h2 className="text-3xl font-bold text-center mb-10 text-[#4cc9f0]">📧 Spot the Difference</h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Fake Email */}
             <div className="bg-[#021727]/70 rounded-2xl p-6 border border-red-600">
               <div className="flex items-center space-x-3 mb-4">
                 <XCircle className="h-7 w-7 text-red-400" />

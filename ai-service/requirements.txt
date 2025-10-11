@@ -2,12 +2,8 @@ flask
 flask-cors
 transformers
 torch
-accelerate
-gunicorn
-urllib3
+pydub
+speechrecognition
 requests
-beautifulsoup4
-sckit-learn
-datasets
-pandas
-numpy
+gunicorn
+accelerate

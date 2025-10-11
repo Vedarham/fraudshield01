@@ -3,8 +3,8 @@ from flask_cors import CORS
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
 from datetime import datetime
 from urllib.parse import urlparse
-from pydub import AudioSegment
-import speech_recognition as sr
+import requests, os
+from dotenv import load_dotenv
 
 # -----------------------------
 # CONFIGURATION
@@ -12,8 +12,12 @@ import speech_recognition as sr
 MODEL_NAME = "vedastra/scam-phish-multilingual-model"
 EMERGENCY_NUMBER = "1930-FRAUD-HELP"
 
+load_dotenv()
 app = Flask(__name__)
 CORS(app)
+
+DEEPGRAM_API_KEY = os.getenv("DEEPGRAM_API_KEY")
+AI_LABEL_MAP = {"LABEL_0": "Not Scam", "LABEL_1": "Scam"}
 
 # -----------------------------
 # LOAD MODEL
@@ -21,12 +25,7 @@ CORS(app)
 try:
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
     model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
-    classifier = pipeline(
-        "text-classification",
-        model=model,
-        tokenizer=tokenizer,
-        return_all_scores=True
-    )
+    classifier = pipeline("text-classification", model=model, tokenizer=tokenizer, return_all_scores=False)
     print("AI model loaded successfully from Hugging Face Hub")
 except Exception as e:
     print("Failed to load AI model:", e)
@@ -47,16 +46,14 @@ SCAM_KEYWORDS = [
 ]
 
 def keyword_flags(text: str) -> list:
-    """Return list of scam-related keywords found in text."""
     text_lower = text.lower()
     found = [kw for kw in SCAM_KEYWORDS if kw in text_lower]
     return found
 
 # -----------------------------
-# HELPER FUNCTIONS
+# HELPERS
 # -----------------------------
 def is_url(text: str) -> bool:
-    """Check if input is a valid URL (http/https)."""
     try:
         result = urlparse(text)
         return all([result.scheme in ["http", "https"], result.netloc])
@@ -64,29 +61,30 @@ def is_url(text: str) -> bool:
         return False
 
 def classify_text(text: str) -> dict:
-    """Run AI model on input text only + add heuristic keywords."""
-    results = classifier(text)
-    top = max(results[0], key=lambda x: x["score"])
-    
-    label_map = {"LABEL_0": "Not Scam", "LABEL_1": "Scam"}
-    final_label = label_map.get(top["label"], "Not Scam")
-    confidence = round(top["score"] * 100, 2)
+    out = classifier(text)
+    if isinstance(out, list):
+        out = out[0]
+
+    label_key = out.get("label")
+    score = float(out.get("score", 0.0))
+    mapped = AI_LABEL_MAP.get(label_key, "Not Scam")
+    confidence = round(score * 100, 2)
 
     flags = keyword_flags(text)
-    if flags and final_label == "Not Scam":
-        final_label = "Suspicious"
+    if flags and mapped != "Scam":
+        mapped = "Suspicious"
         confidence = min(confidence + 10, 95)
 
     return {
-        "label": final_label,
+        "label": mapped,
         "confidence": confidence,
-        "raw_label": top["label"],
-        "all_scores": results[0],
+        "raw_label": label_key,
+        "all_scores": None,
         "flags": flags
     }
 
 # -----------------------------
-# API ROUTE
+# ROUTES
 # -----------------------------
 @app.route("/scan", methods=["POST"])
 def scan():
@@ -107,45 +105,74 @@ def scan():
         "confidence": classification["confidence"],
         "raw_label": classification["raw_label"],
         "all_scores": classification["all_scores"],
-        "keyword_flags": classification["flags"],  
+        "keyword_flags": classification["flags"],
         "emergency": EMERGENCY_NUMBER,
-        "scanned_on": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        "scanned_on": datetime.utcnow().isoformat() + "Z"
     }
 
     return jsonify(response), 200
 
 @app.route('/scanpage', methods=['POST'])
 def scan_text():
-    data = request.json
+    data = request.json or {}
     text = data.get("text", "")
     classification = classify_text(text)
     prediction = classification["label"]
     confidence = classification["confidence"]
 
     return jsonify({
-        "is_scam": bool(prediction),
+        "is_scam": prediction == "Scam",
+        "is_suspicious": prediction == "Suspicious",
         "confidence": confidence
-    })
-
+    }), 200
 
 @app.route("/scan-audio", methods=["POST"])
 def scan_audio():
-    try:
-        file = request.files['audio']
-        audio_path = f'uploads/{file.filename}'
-        file.save(audio_path)
+    if not request.is_json:
+        return jsonify({"error": "Content-Type must be application/json"}), 415
 
-        recognizer = sr.Recognizer()
-        with sr.AudioFile(audio_path) as source:
-            audio = recognizer.record(source)
-        transcript = recognizer.recognize_google(audio)
+    data = request.get_json()
+    audio_url = data.get("audioUrl")
+    if not audio_url:
+        return jsonify({"error": "No audioUrl provided"}), 400
+
+    try:
+        print(f"🎧 Received audio URL: {audio_url}")
+        headers = {"Authorization": f"Token {DEEPGRAM_API_KEY}", "Content-Type": "application/json"}
+        payload = {"url": audio_url, "model": "nova-2", "smart_format": True}
+
+        deepgram_res = requests.post("https://api.deepgram.com/v1/listen", headers=headers, json=payload, timeout=60)
+        deepgram_res.raise_for_status()
+        dg_data = deepgram_res.json()
+
+        transcript = ""
+        try:
+            transcript = dg_data.get("results", {}).get("channels", [{}])[0].get("alternatives", [{}])[0].get("transcript", "")
+        except Exception:
+            transcript = ""
+
+        if not transcript:
+            return jsonify({"error": "No speech detected or transcription empty"}), 400
+
+        print("Transcript:", (transcript[:120] + "...") if len(transcript) > 120 else transcript)
 
         classification = classify_text(transcript)
 
-        return jsonify(classification)
+        response = {
+            "transcript": transcript,
+            **classification,
+            "scanned_on": datetime.utcnow().isoformat() + "Z"
+        }
 
+        return jsonify(response), 200
+
+    except requests.exceptions.RequestException as e:
+        print("❌ Deepgram request error:", e)
+        return jsonify({"error": f"Deepgram request failed: {str(e)}"}), 500
     except Exception as e:
-        return jsonify({"error": str(e)}), 400
+        print("❌ Audio scan error:", e)
+        return jsonify({"error": str(e)}), 500
+
 # -----------------------------
 # ENTRY POINT
 # -----------------------------

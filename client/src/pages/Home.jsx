@@ -254,7 +254,7 @@ const Home = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="tel:1930-FRAUD-HELP"
-              className="bg-white text-[#04334f] px-8 py-4 rounded-lg font-semibold hover:bg-cyan-50 transition-all duration-300 hover:shadow-[0_0_10px_#00ffff]"
+              className="bg-white text-[#04334f] px-8 py-4 rounded-lg font-semibold hover:bg-red-500 transition-all duration-300 hover:shadow-[0_0_50px_#fc265c]"
             >
               Call: 1930-FRAUD-HELP
             </a>
@@ -267,6 +267,11 @@ const Home = () => {
           </div>
         </div>
       </section>
+      <footer className="bg-[#021727] py-6 text-center text-gray-400 border-t border-white/10">
+        <p className="text-sm">
+          © 2025 FraudShield | Awareness by Govt. of India | Stay Vigilant Online
+        </p>
+      </footer>
     </div>
   );
 };

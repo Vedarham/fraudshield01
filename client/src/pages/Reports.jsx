@@ -78,7 +78,6 @@ const Reports = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#021727] to-[#065b7c] text-white py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* 🔰 Enhanced Header Section */}
         <div className="text-center mb-16 relative">
           
           <motion.div
