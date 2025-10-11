@@ -37,22 +37,14 @@ const UserProfile = () => {
     fetchUserProfile();
   }, [user]);
 
-  const handleViewDetails = (report) => {
-    setSelectedReport(report);
-  };
-
-  const handleCreateReport = () => {
-    Navigate('/reports');
-  };
-
+  const handleViewDetails = (report) => setSelectedReport(report);
+  const handleCreateReport = () => Navigate('/reports');
   const handleReportCreated = (reportData) => {
     setReports([reportData, ...reports]);
     setShowCreateModal(false);
   };
 
-  const handleBioChange = (e) => {
-    setBio(e.target.value);
-  };
+  const handleBioChange = (e) => setBio(e.target.value);
 
   const handleBioSubmit = async (e) => {
     e.preventDefault();
@@ -62,26 +54,32 @@ const UserProfile = () => {
     }
   };
 
+  
   const SummaryWidgets = ({ reports }) => {
     const total = reports.length;
     const pending = reports.filter(r => r.status === 'Pending').length;
-    const lastDate = reports.length ? new Date(reports[0].submissionDate.toDate()).toLocaleDateString() : 'No reports';
+    const lastDate = reports.length
+      ? new Date(reports[0].submissionDate.toDate()).toLocaleDateString()
+      : 'No reports';
 
     const widgets = [
-      { title: 'Total Reports', value: total, color: 'bg-blue-500', icon: '📊' },
-      { title: 'Pending Reports', value: pending, color: 'bg-yellow-500', icon: '⏳' },
-      { title: 'Last Report', value: lastDate, color: 'bg-green-500', icon: '📅' }
+      { title: 'Total Reports', value: total, color: 'from-sky-600 to-cyan-600', icon: '📘' },
+      { title: 'Pending Reports', value: pending, color: 'from-blue-500 to-sky-500', icon: '🕓' },
+      { title: 'Last Report', value: lastDate, color: 'from-cyan-500 to-teal-500', icon: '📅' },
     ];
 
     return (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         {widgets.map((w, i) => (
-          <div key={i} className="bg-white rounded-lg shadow p-6 flex justify-between items-center">
+          <div
+            key={i}
+            className="bg-white rounded-xl shadow-lg p-6 flex justify-between items-center border border-gray-200 hover:shadow-xl transition"
+          >
             <div>
               <p className="text-sm text-gray-600">{w.title}</p>
-              <p className="text-2xl font-bold">{w.value}</p>
+              <p className="text-2xl font-bold text-gray-800">{w.value}</p>
             </div>
-            <div className={`${w.color} rounded-full p-3 text-white text-xl`}>
+            <div className={`bg-gradient-to-br ${w.color} rounded-full p-3 text-white text-xl shadow-md`}>
               {w.icon}
             </div>
           </div>
@@ -90,46 +88,58 @@ const UserProfile = () => {
     );
   };
 
-  const UserProfileCard = ({ user }) => {
-    return (
-      <div className="bg-white rounded-lg shadow p-6 mb-8">
-        <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
-          <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center text-4xl text-gray-500">
-            {user && user.photoURL ? (
-              <img src={user.photoURL} alt="Profile" className="rounded-full w-full h-full object-cover" />
-            ) : (
-              '👤'
-            )}
-          </div>
-          <div className="flex-1">
-            <h2 className="text-2xl font-bold">{user ? user.displayName : 'Guest'}</h2>
-            <div className="mt-2">
-              <label className="block text-sm font-medium text-gray-700">Bio</label>
-              {isEditingBio ? (
-                <form onSubmit={handleBioSubmit}>
-                  <textarea
-                    value={bio}
-                    onChange={handleBioChange}
-                    className="w-full border rounded px-3 py-2 mt-1"
-                  />
-                  <div className="flex space-x-2 mt-2">
-                    <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Save</button>
-                    <button onClick={() => setIsEditingBio(false)} className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">Cancel</button>
-                  </div>
-                </form>
-              ) : (
-                <div>
-                  <p className="text-gray-700">{bio || 'No bio added'}</p>
-                  <button onClick={() => setIsEditingBio(true)} className="text-blue-500 hover:underline">Edit Bio</button>
+  
+  const UserProfileCard = ({ user }) => (
+    <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 mb-8 text-gray-800">
+      <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
+        <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center text-4xl border border-gray-300">
+          {user && user.photoURL ? (
+            <img src={user.photoURL} alt="Profile" className="rounded-full w-full h-full object-cover" />
+          ) : (
+            '🧑‍💻'
+          )}
+        </div>
+        <div className="flex-1">
+          <h2 className="text-2xl font-bold text-gray-900">{user ? user.displayName : 'Guest'}</h2>
+          <div className="mt-3">
+            <label className="block text-sm font-medium text-gray-600">💬 Bio</label>
+            {isEditingBio ? (
+              <form onSubmit={handleBioSubmit}>
+                <textarea
+                  value={bio}
+                  onChange={handleBioChange}
+                  className="w-full border border-gray-300 bg-gray-50 text-gray-800 rounded px-3 py-2 mt-1 focus:ring-2 focus:ring-cyan-400"
+                />
+                <div className="flex space-x-2 mt-2">
+                  <button
+                    type="submit"
+                    className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-4 py-2 rounded hover:opacity-90"
+                  >
+                    💾 Save
+                  </button>
+                  <button
+                    onClick={() => setIsEditingBio(false)}
+                    className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300"
+                  >
+                    ❌ Cancel
+                  </button>
                 </div>
-              )}
-            </div>
+              </form>
+            ) : (
+              <div>
+                <p className="text-gray-700">{bio || 'No bio added'}</p>
+                <button onClick={() => setIsEditingBio(true)} className="text-cyan-600 hover:underline mt-1">
+                  ✏️ Edit Bio
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
 
+  
   const ReportsSection = ({ reports }) => {
     const [filter, setFilter] = useState('all');
     const filtered = filter === 'all' ? reports : reports.filter(r => r.status.toLowerCase() === filter);
@@ -138,23 +148,37 @@ const UserProfile = () => {
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold">Scam Reports</h2>
-          <button onClick={handleCreateReport} className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">Submit New Report</button>
+          <h2 className="text-2xl font-bold text-white">🧾 Scam Reports</h2>
+          <button
+            onClick={handleCreateReport}
+            className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-6 py-2 rounded-lg shadow-md hover:opacity-90"
+          >
+            ➕ Submit New Report
+          </button>
         </div>
-        <div className="flex space-x-2 bg-gray-100 p-1 rounded-lg">
+
+        
+        <div className="flex space-x-2 bg-white p-2 rounded-lg border border-gray-200">
           {['all', 'pending', 'verified', 'rejected'].map(key => (
             <button
               key={key}
               onClick={() => setFilter(key)}
-              className={`px-4 py-2 rounded-md text-sm ${filter === key ? 'bg-white shadow text-blue-600' : 'text-gray-600'}`}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                filter === key
+                  ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow'
+                  : 'text-gray-700 hover:bg-gray-100'
+              }`}
             >
-              {key.charAt(0).toUpperCase() + key.slice(1)}
+              {key === 'all' && '🌐 All'}
+              {key === 'pending' && '🕓 Pending'}
+              {key === 'verified' && '✅ Verified'}
+              {key === 'rejected' && '🚫 Rejected'}
             </button>
           ))}
         </div>
 
         {pendingCount > 0 && filter === 'all' && (
-          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+          <div className="bg-white border-l-4 border-cyan-400 p-4 rounded text-gray-700 shadow">
             ⚠️ You have {pendingCount} pending report{pendingCount > 1 ? 's' : ''}.
           </div>
         )}
@@ -162,124 +186,40 @@ const UserProfile = () => {
         {filtered.length ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map(report => (
-              <div key={report.id} className="bg-white rounded shadow p-4">
+              <div key={report.id} className="bg-white rounded-xl shadow p-4 border border-gray-200 hover:shadow-lg transition">
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-semibold">{report.title}</h3>
+                  <h3 className="font-semibold text-gray-900">🗂️ {report.title}</h3>
                   <span className="text-xs px-2 py-1 rounded bg-gray-100 text-gray-700">{report.status}</span>
                 </div>
-                <p className="text-sm text-gray-600 line-clamp-2">{report.description}</p>
+                <p className="text-sm text-gray-700 line-clamp-2">{report.description}</p>
                 <button
                   onClick={() => handleViewDetails(report)}
-                  className="mt-4 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+                  className="mt-4 w-full bg-gradient-to-r from-cyan-600 to-blue-600 text-white py-2 rounded-lg hover:opacity-90"
                 >
-                  View Details
+                  🔍 View Details
                 </button>
               </div>
             ))}
           </div>
         ) : (
-          <div className="text-center text-gray-500 py-8">No reports found.</div>
+          <div className="text-center text-gray-200 py-8">🌊 No reports found.</div>
         )}
       </div>
     );
   };
 
-  const ReportDetailsModal = ({ report, onClose }) => {
-    if (!report) return null;
-    const formatDate = (date) => new Date(date.toDate()).toLocaleString();
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4 z-50">
-        <div className="bg-white max-w-xl w-full rounded-lg overflow-auto max-h-[90vh] p-6">
-          <div className="flex justify-between items-start mb-4">
-            <h2 className="text-2xl font-bold">{report.title}</h2>
-            <button onClick={onClose} className="text-gray-500 text-xl">×</button>
-          </div>
-          <p className="text-sm text-gray-600 mb-2">Submitted: {formatDate(report.submissionDate)}</p>
-          <p className="mb-4">{report.description}</p>
-          <div className="space-y-2">
-            <p><strong>Type:</strong> {report.scamType}</p>
-            <p><strong>Amount:</strong> ₹{report.amount}</p>
-            <p><strong>Location:</strong> {report.location}</p>
-            <p><strong>Contact:</strong> {report.contactInfo}</p>
-            <p><strong>Evidence:</strong> {report.evidence.join(', ')}</p>
-            <p><strong>Status:</strong> {report.status}</p>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const CreateReportModal = ({ isOpen, onClose, onReportCreated }) => {
-    const [form, setForm] = useState({
-      title: '',
-      description: '',
-      scamType: '',
-      amount: '',
-      location: '',
-      contactInfo: '',
-      evidence: ''
-    });
-
-    const handleChange = (e) => {
-      setForm({ ...form, [e.target.name]: e.target.value });
-    };
-
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      const newReport = {
-        ...form,
-        id: Date.now().toString(),
-        evidence: form.evidence.split(',').map(e => e.trim()),
-        submissionDate: new Date(),
-        status: 'Pending',
-        scanResult: null,
-        userId: user.uid
-      };
-      onReportCreated(newReport);
-    };
-
-    if (!isOpen) return null;
-
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4 z-50">
-        <div className="bg-white w-full max-w-lg rounded-lg p-6 overflow-auto max-h-[90vh]">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">Submit Scam Report</h2>
-            <button onClick={onClose} className="text-gray-500 text-xl">×</button>
-          </div>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {['title', 'description', 'scamType', 'amount', 'location', 'contactInfo', 'evidence'].map(field => (
-              <div key={field}>
-                <label className="block text-sm font-medium text-gray-700 capitalize">{field}</label>
-                <input
-                  name={field}
-                  value={form[field]}
-                  onChange={handleChange}
-                  required
-                  className="w-full border rounded px-3 py-2 mt-1"
-                />
-              </div>
-            ))}
-            <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Submit</button>
-          </form>
-        </div>
-      </div>
-    );
-  };
-
+ 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-950 via-cyan-900 to-blue-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600 mt-2">Manage your profile and scam reports</p>
+          <h1 className="text-3xl font-bold text-white">🌊 Dashboard</h1>
+          <p className="text-cyan-300 mt-2">Manage your profile and scam reports efficiently</p>
         </div>
 
         <SummaryWidgets reports={reports} />
         <UserProfileCard user={user} />
         <ReportsSection reports={reports} />
-        <ReportDetailsModal report={selectedReport} onClose={() => setSelectedReport(null)} />
-        <CreateReportModal isOpen={showCreateModal} onClose={() => setShowCreateModal(false)} onReportCreated={handleReportCreated} />
       </div>
     </div>
   );
