@@ -3,6 +3,8 @@ from flask_cors import CORS
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
 from datetime import datetime
 from urllib.parse import urlparse
+from pydub import AudioSegment
+import speech_recognition as sr
 
 # -----------------------------
 # CONFIGURATION
@@ -125,6 +127,25 @@ def scan_text():
         "confidence": confidence
     })
 
+
+@app.route("/scan-audio", methods=["POST"])
+def scan_audio():
+    try:
+        file = request.files['audio']
+        audio_path = f'uploads/{file.filename}'
+        file.save(audio_path)
+
+        recognizer = sr.Recognizer()
+        with sr.AudioFile(audio_path) as source:
+            audio = recognizer.record(source)
+        transcript = recognizer.recognize_google(audio)
+
+        classification = classify_text(transcript)
+
+        return jsonify(classification)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 # -----------------------------
 # ENTRY POINT
 # -----------------------------
