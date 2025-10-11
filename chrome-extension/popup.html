@@ -6,108 +6,181 @@
     <title>Scam Text Scanner</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
       body {
-        width: 360px;
-        padding: 22px;
+        width: 380px;
+        padding: 24px;
         margin: 0;
-        font-family: "Newsreader", serif;
-        background: linear-gradient(145deg, #0a132e, #091020 85%);
-        color: #e9f1ff;
-        border-radius: 18px;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        background: #000000;
+        color: #ffffff;
+        border-radius: 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
         text-align: center;
-        min-height: 420px;
-        box-shadow: 0 0 25px rgba(0, 60, 150, 0.4);
+        min-height: 480px;
+        box-shadow: 
+          0 0 40px rgba(0, 150, 255, 0.3),
+          0 20px 60px rgba(0, 0, 0, 0.8);
         overflow: hidden;
+        position: relative;
+      }
+
+      body::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 20% 20%, rgba(0, 150, 255, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(0, 200, 255, 0.08) 0%, transparent 50%);
+        pointer-events: none;
       }
 
       h3 {
-        font-size: 1.5em;
-        color: #fc7070;
-        margin-bottom: 18px;
-        text-shadow: 0 0 12px rgba(120, 170, 255, 0.4);
-        letter-spacing: 0.5px;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1.8em;
+        font-weight: 900;
+        color: #ffffff;
+        margin-bottom: 24px;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        letter-spacing: 1px;
+        position: relative;
+        z-index: 1;
       }
 
       textarea {
-        width: 90%;
-        height: 130px;
-        border: 1px solid rgba(130, 160, 255, 0.2);
-        border-radius: 14px;
-        padding: 14px;
+        width: 92%;
+        height: 140px;
+        border: 2px solid rgba(0, 150, 255, 0.2);
+        border-radius: 16px;
+        padding: 18px;
         resize: none;
-        font-size: 14px;
-        font-family: inherit;
-        color: #f0f5ff;
-        background: rgba(255, 255, 255, 0.06);
+        font-size: 15px;
+        font-family: "Inter", sans-serif;
+        font-weight: 400;
+        color: #ffffff;
+        background: rgba(0, 150, 255, 0.05);
         outline: none;
-        backdrop-filter: blur(8px);
-        transition: all 0.3s ease;
+        backdrop-filter: blur(12px);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        z-index: 1;
       }
 
       textarea::placeholder {
-        color: #9fb7ff;
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: 400;
       }
 
       textarea:focus {
-        background: rgba(255, 255, 255, 0.1);
-        box-shadow: 0 0 20px rgba(0, 122, 255, 0.3);
-        border-color: rgba(0, 140, 255, 0.4);
-        transform: scale(1.02);
+        background: rgba(0, 150, 255, 0.08);
+        box-shadow: 
+          0 0 30px rgba(0, 150, 255, 0.4),
+          0 0 0 1px rgba(0, 200, 255, 0.3);
+        border-color: rgba(0, 200, 255, 0.6);
+        transform: translateY(-2px);
       }
 
       button {
-        margin-top: 12px;
-        width: 84%;
-        padding: 12px;
+        margin-top: 14px;
+        width: 42.5%;
+        padding: 6px 10px;
         border: none;
-        border-radius: 0.5rem;
-        background: linear-gradient(120deg, #009696, #00ffff);
-        color: #fff;
-        font-size: 15px;
-        font-weight: 600;
-        letter-spacing: 0.3px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #333333, #555555, #333333);
+        background-size: 200% 200%;
+        color: #ffffff;
+        font-size: 12px;
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 900;
+        letter-spacing: 0.5px;
         cursor: pointer;
-        box-shadow: 0 4px 20px rgba(0, 140, 255, 0.3);
-        transition: all 0.3s ease;
+        box-shadow: 
+          0 4px 12px rgba(0, 0, 0, 0.6),
+          0 0 0 1px rgba(255, 255, 255, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+      }
+
+      button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.6s ease;
+      }
+
+      button:hover::before {
+        left: 100%;
       }
 
       button:hover {
-        transform: translateY(-2px) scale(1.04);
-        box-shadow: 0 6px 25px rgba(0, 160, 255, 0.5);
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 
+          0 6px 18px rgba(0, 0, 0, 0.8),
+          0 0 0 1px rgba(255, 255, 255, 0.2);
+        background-position: 100% 0;
+      }
+
+      button:active {
+        transform: translateY(-1px) scale(0.98);
       }
 
       .result {
-        margin-top: 18px;
-        width: 90%;
-        background: rgba(255, 255, 255, 0.04);
-        border-radius: 14px;
-        border: 1px solid rgba(140, 160, 255, 0.15);
-        padding: 14px;
-        backdrop-filter: blur(12px);
-        box-shadow: inset 0 0 10px rgba(0, 120, 255, 0.15);
+        margin-top: 20px;
+        width: 92%;
+        background: linear-gradient(135deg, rgba(0, 150, 255, 0.08), rgba(0, 200, 255, 0.05));
+        border-radius: 16px;
+        border: 1px solid rgba(0, 150, 255, 0.2);
+        padding: 20px;
+        backdrop-filter: blur(16px);
+        box-shadow: 
+          0 8px 25px rgba(0, 150, 255, 0.15),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
         text-align: left;
+        position: relative;
+        z-index: 1;
+      }
+
+      .result::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(180deg, #00d4ff, #0099cc);
+        border-radius: 16px 0 0 16px;
       }
 
       .result p {
-        margin: 8px 0;
-        font-size: 14px;
-        line-height: 1.4;
-        color: #d7e1ff;
+        margin: 12px 0;
+        font-size: 15px;
+        font-family: "Inter", sans-serif;
+        line-height: 1.5;
+        color: #ffffff;
+        font-weight: 700;
       }
 
       #prediction {
-        color: #00e0ff;
-        font-weight: 600;
+        color: #00d4ff;
+        font-weight: 900;
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
       }
 
       #confidence {
-        color: #9dbdff;
+        color: #ffffff;
+        font-weight: 800;
       }
 
       @keyframes soft-glow {
@@ -125,17 +198,319 @@
       body {
         animation: soft-glow 6s ease-in-out infinite alternate;
       }
+
+      /* Modal Dialog Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(10, 14, 26, 0.95));
+        backdrop-filter: blur(16px);
+        animation: modalFadeIn 0.4s ease-out;
+      }
+
+      @keyframes modalFadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      .modal-content {
+        background: linear-gradient(145deg, #0a0e1a, #1a2332, #0f1419);
+        margin: 8% auto;
+        padding: 40px;
+        border: 2px solid rgba(0, 150, 255, 0.3);
+        border-radius: 24px;
+        width: 88%;
+        max-width: 480px;
+        box-shadow: 
+          0 0 60px rgba(0, 150, 255, 0.4),
+          0 25px 80px rgba(0, 0, 0, 0.9),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+        font-family: "Inter", sans-serif;
+        position: relative;
+        animation: modalSlideIn 0.5s ease-out;
+        overflow: hidden;
+      }
+
+      .modal-content::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #00d4ff, #0099cc, #00d4ff);
+        animation: shimmer 3s infinite;
+      }
+
+      @keyframes modalSlideIn {
+        from { 
+          transform: translateY(-60px) scale(0.9);
+          opacity: 0;
+        }
+        to { 
+          transform: translateY(0) scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+      }
+
+      .close {
+        color: #00d4ff;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+        line-height: 1;
+        font-family: "Space Grotesk", sans-serif;
+      }
+
+      .close:hover {
+        color: #00a8ff;
+        transform: scale(1.1);
+        text-shadow: 0 0 20px rgba(0, 168, 255, 0.8);
+      }
+
+      .upload-area {
+        border: 3px dashed rgba(0, 150, 255, 0.4);
+        border-radius: 20px;
+        padding: 45px 35px;
+        text-align: center;
+        margin: 30px 0;
+        background: linear-gradient(135deg, rgba(0, 150, 255, 0.06), rgba(0, 200, 255, 0.04));
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .upload-area::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(0, 200, 255, 0.1), transparent);
+        transition: left 0.6s ease;
+      }
+
+      .upload-area:hover::before {
+        left: 100%;
+      }
+
+      .upload-area:hover {
+        border-color: rgba(0, 200, 255, 0.7);
+        background: linear-gradient(135deg, rgba(0, 150, 255, 0.1), rgba(0, 200, 255, 0.08));
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(0, 150, 255, 0.25);
+      }
+
+      .upload-area.dragover {
+        border-color: #00d4ff;
+        background: linear-gradient(135deg, rgba(0, 150, 255, 0.12), rgba(0, 200, 255, 0.1));
+        transform: scale(1.02);
+        box-shadow: 0 20px 50px rgba(0, 150, 255, 0.35);
+      }
+
+      .file-input {
+        display: none;
+      }
+
+      .upload-icon {
+        font-size: 72px;
+        margin-bottom: 25px;
+        color: #00d4ff;
+        text-shadow: 0 0 25px rgba(0, 212, 255, 0.7);
+        animation: iconPulse 3s infinite;
+      }
+
+      @keyframes iconPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.08); }
+      }
+
+      .upload-text {
+        color: #ffffff;
+        margin-bottom: 18px;
+        font-size: 18px;
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 600;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
+
+      .upload-text small {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 15px;
+        font-weight: 400;
+        display: block;
+        margin-top: 10px;
+        font-family: "Inter", sans-serif;
+      }
+
+      .file-info {
+        margin-top: 25px;
+        padding: 18px;
+        background: linear-gradient(135deg, rgba(0, 150, 255, 0.1), rgba(0, 200, 255, 0.06));
+        border: 1px solid rgba(0, 150, 255, 0.3);
+        border-radius: 14px;
+        font-size: 15px;
+        font-family: "Inter", sans-serif;
+        color: #ffffff;
+        box-shadow: 
+          inset 0 2px 4px rgba(0, 0, 0, 0.2),
+          0 4px 15px rgba(0, 150, 255, 0.1);
+        animation: fileInfoSlideIn 0.4s ease-out;
+      }
+
+      @keyframes fileInfoSlideIn {
+        from { 
+          opacity: 0;
+          transform: translateY(15px);
+        }
+        to { 
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .upload-submit {
+        width: 100%;
+        padding: 18px 24px;
+        margin-top: 25px;
+        border: none;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #00d4ff, #0099cc, #00d4ff);
+        background-size: 200% 200%;
+        color: #ffffff;
+        font-size: 17px;
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+        box-shadow: 
+          0 8px 25px rgba(0, 212, 255, 0.4),
+          0 0 0 1px rgba(0, 200, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+        letter-spacing: 0.5px;
+      }
+
+      .upload-submit::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.6s ease;
+      }
+
+      .upload-submit:hover::before {
+        left: 100%;
+      }
+
+      .upload-submit:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 10px 30px rgba(0, 255, 255, 0.6);
+        background-position: 100% 0;
+      }
+
+      .upload-submit:active {
+        transform: translateY(-1px) scale(0.98);
+      }
+
+      .upload-submit:disabled {
+        background: linear-gradient(135deg, #666, #555);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .upload-submit:disabled::before {
+        display: none;
+      }
+
+      
+      #uploadButton {
+        position: relative;
+        overflow: hidden;
+        font-family: "Space Grotesk", sans-serif;
+      }
+
+      #uploadButton::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.6s ease;
+      }
+
+      #uploadButton:hover::before {
+        left: 100%;
+      }
+
+      #uploadButton:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.8);
+        background-position: 100% 0;
+      }
+
+      #uploadButton:active {
+        transform: translateY(-1px) scale(0.98);
+      }
     </style>
   </head>
 
   <body>
-    <h3>🛡️Scam Text Scanner</h3>
+    <h3>🔒 Scam Text Scanner</h3>
     <textarea id="inputText" placeholder="Paste or type text to analyze..."></textarea>
     <button id="scanButton">Analyze Text</button>
+    <button id="uploadButton" style="margin-top: 10px; background: linear-gradient(135deg, #333333, #555555, #333333); background-size: 200% 200%; font-weight: 900; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);">Upload Document</button>
 
     <div class="result">
       <p><strong>Prediction:</strong> <span id="prediction"></span></p>
       <p><strong>Confidence:</strong> <span id="confidence"></span></p>
+    </div>
+
+    
+    <div id="uploadModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3 style="color: #00d4ff; margin-bottom: 30px; font-size: 26px; font-weight: 800; text-shadow: 0 0 20px rgba(0, 212, 255, 0.6); text-align: center; letter-spacing: 1.5px; font-family: 'Space Grotesk', sans-serif;">📄 DOCUMENT ANALYZER</h3>
+        
+        <div class="upload-area" id="uploadArea">
+          <div class="upload-icon">📁</div>
+          <div class="upload-text">
+            <strong>Click to select or drag & drop</strong><br>
+            <small>Supported formats: PDF, DOC, DOCX, TXT</small>
+          </div>
+          <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt">
+        </div>
+        
+        <div id="fileInfo" class="file-info" style="display: none;">
+          <strong>Selected file:</strong> <span id="fileName"></span><br>
+          <strong>Size:</strong> <span id="fileSize"></span>
+        </div>
+        
+        <button id="uploadSubmit" class="upload-submit" disabled>Analyze Document</button>
+      </div>
     </div>
 
     <script src="popup.js"></script>
