@@ -2,7 +2,6 @@ import React from 'react'
 function Education() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
- 
       <header className="hero-section relative bg-gradient-to-r from-blue-600 via-purple-700 to-indigo-800 text-white py-20 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="absolute top-0 left-0 w-full h-full">
@@ -31,7 +30,6 @@ function Education() {
 
 
       <main className="max-w-6xl mx-auto px-4 py-12">
-        
         <section className="mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
             🚩 Common Signs of a Scam
@@ -75,13 +73,11 @@ function Education() {
           </div>
         </section>
 
-       
         <section className="mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
             📧 Spot the Difference: Fake vs Real
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          
             <div className="bg-red-50 border-2 border-red-300 rounded-lg p-6">
               <div className="flex items-center mb-4">
                 <span className="text-3xl mr-3">❌</span>
@@ -99,7 +95,6 @@ function Education() {
               </div>
             </div>
 
-      
             <div className="bg-green-50 border-2 border-green-300 rounded-lg p-6">
               <div className="flex items-center mb-4">
                 <span className="text-3xl mr-3">✅</span>
@@ -119,13 +114,12 @@ function Education() {
           </div>
         </section>
 
-      
         <section className="mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
             💡 Safety Tips
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            
+            {/* Do's Card */}
             <div className="bg-green-50 border-2 border-green-300 rounded-lg p-8">
               <div className="flex items-center mb-6">
                 <span className="text-4xl mr-4">✅</span>
@@ -155,7 +149,7 @@ function Education() {
               </ul>
             </div>
 
-        
+            {/* Don'ts Card */}
             <div className="bg-red-50 border-2 border-red-300 rounded-lg p-8">
               <div className="flex items-center mb-6">
                 <span className="text-4xl mr-4">❌</span>
@@ -187,7 +181,6 @@ function Education() {
           </div>
         </section>
 
-  
         <section className="mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
             🚨 Reporting & Resources
@@ -250,7 +243,6 @@ function Education() {
           </div>
         </section>
       </main>
-
 
       <footer className="bg-gray-800 text-white py-8 px-4">
         <div className="max-w-6xl mx-auto text-center">

@@ -48,7 +48,6 @@ const modelStats = [
 
   return (
     <div className="min-h-screen">
-    
       <section className="relative text-white h-screen overflow-hidden">
       <video
         autoPlay
@@ -94,10 +93,10 @@ const modelStats = [
         </div>
       </div>
 
+
       <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent z-20" />
     </section>
 
-  
      <section className="py-16 bg-#19183B text-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -172,7 +171,7 @@ const modelStats = [
           </div>
         </div>
       </section>
-      
+
         <section className="relative py-20 text-white overflow-hidden">
       <div className="absolute inset-0 z-0">
         <img

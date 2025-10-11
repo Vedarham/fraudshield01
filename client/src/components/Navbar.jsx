@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Shield, Menu, X, LogOut, User } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-
-  
-  const [user, setUser] = useState(null); 
-  const handleLogout = () => {
-    setUser(null);
-    alert('Logged out (mock)');
-  };
+  const { user, logout } = useAuth();
 
   const isActive = (path) => location.pathname === path;
 
@@ -22,10 +17,9 @@ const Navbar = () => {
     { path: '/reports', label: 'Reports' },
     { path: '/game', label: 'Game' },
     { path: '/emergency', label: 'Emergency' },
-    { path: '/education', label: 'Education' },
-    { path: '/profile', label: 'Profile' },
+    { path:'/education', label:'Education'},
+    { path:'/profile', label:'Profile' },
   ];
-
   const userAvatar = user?.avatar || `https://placehold.co/40x40/E2E8F0/4A5568?text=${user?.name?.[0] || 'U'}`;
 
   return (
@@ -41,7 +35,6 @@ const Navbar = () => {
             </Link>
           </div>
 
-          
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
               <Link
@@ -62,11 +55,15 @@ const Navbar = () => {
             {user ? (
               <div className="flex items-center space-x-3">
                 <div className="flex items-center space-x-2">
-                  <img src={userAvatar} alt={user.name} className="h-8 w-8 rounded-full" />
+                  <img
+                    src={userAvatar}
+                    alt={user.name}
+                    className="h-8 w-8 rounded-full"
+                  />
                   <span className="text-sm text-gray-700">{user.name}</span>
                 </div>
                 <button
-                  onClick={handleLogout}
+                  onClick={logout}
                   className="flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-red-600 hover:bg-red-50 transition-colors"
                 >
                   <LogOut className="h-4 w-4" />
@@ -95,7 +92,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      
       {isOpen && (
         <motion.div
           initial={{ opacity: 0, height: 0 }}
@@ -121,12 +117,16 @@ const Navbar = () => {
             {user ? (
               <div className="border-t border-gray-200 pt-4 mt-4">
                 <div className="flex items-center px-3 py-2">
-                  <img src={userAvatar} alt={user.name} className="h-8 w-8 rounded-full mr-3" />
+                  <img
+                    src={userAvatar}
+                    alt={user.name}
+                    className="h-8 w-8 rounded-full mr-3"
+                  />
                   <span className="text-base font-medium text-gray-700">{user.name}</span>
                 </div>
                 <button
                   onClick={() => {
-                    handleLogout();
+                    logout();
                     setIsOpen(false);
                   }}
                   className="flex items-center w-full px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50 transition-colors"
