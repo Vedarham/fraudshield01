@@ -1,39 +1,31 @@
-import React, { useState } from 'react';
-import { AlertTriangle, Send, User, Shield } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { useAuth } from '../context/AuthContext';
-import { toast } from 'react-toastify';
-import { Navigate } from 'react-router-dom';
-import { submitReport } from '../services/api';
+import React, { useState } from "react";
+import { AlertTriangle, Send, User, Shield } from "lucide-react";
+import { motion } from "framer-motion";
+import { toast } from "react-toastify";
+import { submitReport } from "../services/api.js";
 
 const ReportScam = () => {
-  const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    title: '',
-    content: '',
-    type: '',
-    severity: '',
-    additionalInfo: ''
+    title: "",
+    content: "",
+    type: "",
+    severity: "",
+    additionalInfo: "",
   });
 
-  // Redirect if not authenticated
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.title || !formData.content || !formData.type || !formData.severity) {
-      toast.error('Please fill in all required fields');
+      toast.error("Please fill in all required fields");
       return;
     }
 
@@ -42,81 +34,79 @@ const ReportScam = () => {
     try {
       const reportData = {
         ...formData,
-        reportedBy: user.email,
+        reportedBy: "Anonymous User",
         timestamp: new Date().toISOString(),
       };
 
       await submitReport(reportData);
-      
-      toast.success('Scam report submitted successfully! Thank you for helping protect others.');
-      
-      // Reset form
-      setFormData({
-        title: '',
-        content: '',
-        type: '',
-        severity: '',
-        additionalInfo: ''
-      });
+      toast.success("✅ Scam report submitted successfully!");
 
+      setFormData({
+        title: "",
+        content: "",
+        type: "",
+        severity: "",
+        additionalInfo: "",
+      });
     } catch (error) {
-      toast.error('Failed to submit report. Please try again.',error);
+      toast.error("Failed to submit report. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const severityColors = {
-    'Low': 'text-green-600 border-green-300 bg-green-50',
-    'Medium': 'text-yellow-600 border-yellow-300 bg-yellow-50',
-    'High': 'text-orange-600 border-orange-300 bg-orange-50',
-    'Critical': 'text-red-600 border-red-300 bg-red-50'
+    Low: "text-green-400 border-green-400 bg-green-900/20",
+    Medium: "text-yellow-400 border-yellow-400 bg-yellow-900/20",
+    High: "text-orange-400 border-orange-400 bg-orange-900/20",
+    Critical: "text-red-400 border-red-400 bg-red-900/20",
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8">
-          <AlertTriangle className="h-16 w-16 mx-auto mb-4 text-red-600" />
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Report a Scam</h1>
-          <p className="text-xl text-gray-600">
-            Help protect others by sharing your scam encounter
+    <div className="min-h-screen bg-gradient-to-br from-[#021727] to-[#065b7c] text-white py-10">
+      <div className="max-w-4xl mx-auto px-6">
+        
+        <div className="text-center mb-10">
+          <motion.div
+            animate={{ y: [0, -10, 0] }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          >
+            <AlertTriangle className="h-16 w-16 mx-auto mb-4 text-[#4cc9f0]" />
+          </motion.div>
+          <h1 className="text-4xl font-bold text-white mb-3">Report a Scam</h1>
+          <p className="text-lg text-gray-300">
+            Help protect others by reporting suspicious activity 🕵️‍♂️
           </p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          {/* User Info */}
-          <div className="flex items-center space-x-3 mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <User className="h-5 w-5 text-blue-600" />
-            <span className="text-blue-800">Reporting as: <strong>{user.name}</strong> ({user.email})</span>
-          </div>
-
+        
+        <div className="bg-white/10 backdrop-blur-md rounded-xl shadow-lg border border-[#043a4d] p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Title */}
+            
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Report Title <span className="text-red-500">*</span>
+              <label className="block text-sm font-semibold mb-2 text-gray-200">
+                Report Title <span className="text-red-400">*</span>
               </label>
               <input
                 type="text"
                 value={formData.title}
-                onChange={(e) => handleInputChange('title', e.target.value)}
+                onChange={(e) => handleInputChange("title", e.target.value)}
                 placeholder="e.g., Fake Bank Security Alert"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-[#065b7c] rounded-lg bg-[#021727]/70 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#4cc9f0] focus:border-transparent"
                 required
               />
             </div>
 
-            {/* Type and Severity */}
+            
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Scam Type <span className="text-red-500">*</span>
+                <label className="block text-sm font-semibold mb-2 text-gray-200">
+                  Scam Type <span className="text-red-400">*</span>
                 </label>
                 <select
                   value={formData.type}
-                  onChange={(e) => handleInputChange('type', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  onChange={(e) => handleInputChange("type", e.target.value)}
+                  className="w-full px-4 py-3 border border-[#065b7c] rounded-lg bg-[#021727]/70 text-white focus:ring-2 focus:ring-[#4cc9f0]"
                   required
                 >
                   <option value="">Select type</option>
@@ -129,86 +119,87 @@ const ReportScam = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Severity Level <span className="text-red-500">*</span>
+                <label className="block text-sm font-semibold mb-2 text-gray-200">
+                  Severity Level <span className="text-red-400">*</span>
                 </label>
                 <select
                   value={formData.severity}
-                  onChange={(e) => handleInputChange('severity', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  onChange={(e) => handleInputChange("severity", e.target.value)}
+                  className="w-full px-4 py-3 border border-[#065b7c] rounded-lg bg-[#021727]/70 text-white focus:ring-2 focus:ring-[#4cc9f0]"
                   required
                 >
                   <option value="">Select severity</option>
-                  <option value="Low">Low - Suspicious but not immediately harmful</option>
-                  <option value="Medium">Medium - Potential financial loss</option>
-                  <option value="High">High - Significant financial or personal risk</option>
-                  <option value="Critical">Critical - Immediate danger or large financial loss</option>
+                  <option value="Low">Low - Mildly suspicious</option>
+                  <option value="Medium">Medium - Possible financial risk</option>
+                  <option value="High">High - Strong evidence of fraud</option>
+                  <option value="Critical">Critical - Confirmed scam</option>
                 </select>
               </div>
             </div>
 
-            {/* Severity Indicator */}
+            
             {formData.severity && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`p-4 rounded-lg border-2 ${severityColors[formData.severity]}`}
+                className={`p-4 rounded-lg border ${severityColors[formData.severity]}`}
               >
                 <div className="flex items-center space-x-2">
                   <Shield className="h-5 w-5" />
-                  <span className="font-medium">Severity: {formData.severity}</span>
+                  <span className="font-medium">
+                    Severity: {formData.severity}
+                  </span>
                 </div>
               </motion.div>
             )}
 
-            {/* Content */}
+           
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Scam Content <span className="text-red-500">*</span>
+              <label className="block text-sm font-semibold mb-2 text-gray-200">
+                Scam Content <span className="text-red-400">*</span>
               </label>
               <textarea
                 value={formData.content}
-                onChange={(e) => handleInputChange('content', e.target.value)}
-                placeholder="Paste the exact message, email content, or describe the scam attempt in detail..."
+                onChange={(e) => handleInputChange("content", e.target.value)}
+                placeholder="Describe the scam message, website, or suspicious activity..."
                 rows={6}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-3 border border-[#065b7c] rounded-lg bg-[#021727]/70 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#4cc9f0] resize-none"
                 required
               />
-              <p className="text-sm text-gray-500 mt-2">
-                Include as much detail as possible to help others identify similar scams
-              </p>
             </div>
 
-            {/* Additional Information */}
+            
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-semibold mb-2 text-gray-200">
                 Additional Information
               </label>
               <textarea
                 value={formData.additionalInfo}
-                onChange={(e) => handleInputChange('additionalInfo', e.target.value)}
-                placeholder="Any additional context, how you received it, what made you suspicious, etc."
+                onChange={(e) => handleInputChange("additionalInfo", e.target.value)}
+                placeholder="Add more details if any..."
                 rows={4}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-3 border border-[#065b7c] rounded-lg bg-[#021727]/70 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#4cc9f0] resize-none"
               />
             </div>
 
-            {/* Privacy Notice */}
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <h3 className="font-medium text-yellow-800 mb-2">🔒 Privacy & Safety Notice</h3>
-              <ul className="text-yellow-700 text-sm space-y-1">
-                <li>• Your report will be publicly visible to help others</li>
-                <li>• Personal information (like your name) will be anonymized</li>
-                <li>• Remove any personal details from the scam content before submitting</li>
+           
+            <div className="bg-[#043a4d]/60 border border-[#065b7c] rounded-lg p-4">
+              <h3 className="font-semibold text-[#4cc9f0] mb-2">
+                🔒 Privacy & Safety Notice
+              </h3>
+              <ul className="text-sm text-gray-300 space-y-1">
                 <li>• Reports are reviewed before publication</li>
+                <li>• Do not share personal details in scam text</li>
+                <li>• Your report may help protect other users</li>
+                <li>• Emergency contact: 1930 (Cyber Helpline)</li>
               </ul>
             </div>
 
-            {/* Submit Button */}
+            
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-gradient-to-r from-red-600 to-orange-600 text-white py-4 rounded-lg font-semibold hover:from-red-700 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center space-x-2"
+              className="w-full bg-gradient-to-r from-[#043a4d] to-[#065b7c] py-4 rounded-lg font-semibold text-white hover:from-[#065b7c] hover:to-[#0a7ba0] transition-all disabled:opacity-50 flex items-center justify-center space-x-2 shadow-md shadow-[#043a4d]/50"
             >
               {isSubmitting ? (
                 <>
@@ -224,21 +215,23 @@ const ReportScam = () => {
             </button>
           </form>
 
-          {/* Help Section */}
-          <div className="mt-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
-            <h3 className="font-bold text-gray-800 mb-3">Need Help or Immediate Assistance?</h3>
-            <div className="flex flex-col sm:flex-row gap-4">
+          
+          <div className="mt-10 p-6 bg-[#021727]/60 border border-[#043a4d] rounded-lg text-center">
+            <h3 className="font-bold text-[#4cc9f0] mb-3">
+              Need Help or Immediate Assistance?
+            </h3>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="tel:1930-FRAUD-HELP"
-                className="flex items-center justify-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                href="tel:1930"
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
               >
-                <span>📞 Emergency: 1930-FRAUD-HELP</span>
+                📞 Call 1930 - Cyber Helpline
               </a>
               <a
                 href="/emergency"
-                className="flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-[#065b7c] text-white rounded-lg hover:bg-[#0a7ba0] transition"
               >
-                <span>🆘 Emergency Resources</span>
+                🆘 View Emergency Resources
               </a>
             </div>
           </div>

@@ -11,7 +11,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { user, login, loginWithGoogle } = useAuth();
 
-  // Redirect if already logged in
+  
   if (user) {
     return <Navigate to="/" replace />;
   }
@@ -61,7 +61,7 @@ const Login = () => {
             disabled={isLoading}
             className="w-full flex items-center justify-center space-x-3 bg-white border-2 border-gray-300 rounded-lg px-4 py-3 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mb-6"
           >
-            {/* <Chrome className="h-5 w-5 text-blue-600" /> */}
+            
             <span className="text-gray-700 font-medium">Continue with Google</span>
           </button>
 
@@ -164,7 +164,7 @@ const Login = () => {
             </p>
           </div>
 
-          {/* Demo Credentials */}
+          
           <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
             <p className="text-sm text-blue-800 font-medium mb-2">Demo Credentials:</p>
             <p className="text-sm text-blue-700">

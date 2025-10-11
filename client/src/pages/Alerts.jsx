@@ -63,7 +63,7 @@ const Alerts = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+       
         <div className="text-center mb-8">
           <Bell className="h-16 w-16 mx-auto mb-4 text-red-600" />
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Scam Alerts</h1>
@@ -72,11 +72,11 @@ const Alerts = () => {
           </p>
         </div>
 
-        {/* Controls */}
+        
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
             <div className="flex items-center space-x-4">
-              {/* Language Toggle */}
+             
               <div className="flex items-center space-x-2">
                 <Globe className="h-5 w-5 text-gray-500" />
                 <span className="text-sm text-gray-700">Language:</span>
@@ -118,7 +118,7 @@ const Alerts = () => {
           </div>
         </div>
 
-        {/* Emergency Banner */}
+        
         <div className="bg-red-600 text-white rounded-xl p-6 mb-8">
           <div className="flex items-center justify-center space-x-4">
             <AlertTriangle className="h-8 w-8" />
@@ -139,7 +139,7 @@ const Alerts = () => {
           </div>
         </div>
 
-        {/* Stats */}
+        
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-lg p-6 text-center">
             <div className="text-3xl font-bold text-red-600 mb-2">
@@ -175,7 +175,7 @@ const Alerts = () => {
           </div>
         </div>
 
-        {/* Alerts List */}
+        
         <div className="space-y-6">
           {(Array.isArray(alerts) ? alerts : []).map((alert, index) => (
             <motion.div
