@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Scam Text Scanner",
+  "description": "Scan text from the web page to detect scams.",
+  "version": "1.0",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "identity"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ]
+}
